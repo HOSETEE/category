@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分類選擇</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      padding: 0;
+      background: #fff;
+      min-height: 100vh;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+      color: #1d1d1f;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 0 24px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #1d1d1f;
+      font-size: 2.6rem;
+      margin-bottom: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: none;
+      animation: none;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 32px;
+      margin-top: 0;
+      align-items: stretch;
+      justify-items: stretch;
+      place-items: stretch;
+    }
+    
+    .card {
+      background: #fff;
+      border: 1px solid #e0e0e5;
+      border-radius: 18px;
+      padding: 32px 20px 20px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: box-shadow 0.25s cubic-bezier(0.4,0,0.2,1),transform 0.18s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-color: #bdbdbd;
+      background: #fafafc;
+      z-index: 10;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 18px 0 8px;
+      color: #1d1d1f;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: none;
+    }
+    
+    .card-desc {
+      font-size: 0.98rem;
+      font-weight: 400;
+      margin: 0 0 12px;
+      color: #86868b;
+      background: #f5f5f7;
+      padding: 7px 14px;
+      border-radius: 12px;
+      border: none;
+      text-align: center;
+      letter-spacing: 0.2px;
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 0 32px 0;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: #f5f5f7;
+      border: none;
+      border-radius: 30px;
+      color: #1d1d1f;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .back-btn:hover {
+      background: #e0e0e5;
+      color: #0071e3;
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 24px 8px 0 8px; }
+      h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
+      .card { padding: 18px 10px 10px 10px; min-height: 120px; }
+      .card-title { font-size: 1rem; margin: 12px 0 6px; }
+      .card-desc { font-size: 0.8rem; padding: 4px 8px; margin: 0 0 8px; }
+    }
+    
+    @media (max-width: 480px) {
+      .container { padding: 12px 2px 0 2px; }
+      h1 { font-size: 1.3rem; margin-bottom: 1rem; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .card { padding: 8px 4px 4px 4px; min-height: 80px; }
+      .card-title { font-size: 0.85rem; margin: 6px 0 4px; }
+      .card-desc { font-size: 0.7rem; padding: 2px 5px; margin: 0 0 4px; }
+    }
+    
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      padding: 0 20px;
+    }
+    
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .category-button {
+      position: relative;
+      width: 300px;
+      height: 120px;
+      background: #fff;
+      border: 1px solid #e0e0e5;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: box-shadow 0.25s cubic-bezier(0.4,0,0.2,1),transform 0.18s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      text-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .category-button:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-color: #bdbdbd;
+      background: #fafafc;
+    }
+    
+    .category-button:active {
+      transform: translateY(0) scale(1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    
+    /* 按鈕圖標 */
+    .button-icon {
+      margin-right: 12px;
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    
+    .category-button:hover .button-icon {
+      opacity: 1;
+    }
+    
+    /* 特定按鈕樣式 - 保持一致的白色卡片風格 */
+    .authors-button,
+    .tags-button {
+      /* 繼承基本的 category-button 樣式 */
+    }
+    
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .category-button {
+        width: 280px;
+        height: 100px;
+        font-size: 1.1rem;
+      }
+      
+      .button-image {
+        width: 60px;
+        height: 60px;
+        right: -15px;
+        top: -15px;
+      }
+      
+      .button-image img {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .button-text {
+        padding-right: 45px;
+        padding-left: 25px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .category-button {
+        width: 250px;
+        height: 90px;
+        font-size: 1rem;
+      }
+      
+      .buttons-container {
+        gap: 1.5rem;
+      }
+    }
+    
+    /* 簡化載入效果 */
+    .category-button {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 點擊波紋效果 */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: rippleEffect 0.6s linear;
+      pointer-events: none;
+    }
+    
+    @keyframes rippleEffect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>請選擇分類方式</h1>
+    <div class="buttons-container">
+      <button class="category-button authors-button" onclick="navigateTo('authors.html')">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#86868b">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        作者分類
+      </button>
+      
+      <button class="category-button tags-button" onclick="navigateTo('tags.html')">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#86868b">
+          <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+        </svg>
+        Tag分類
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function navigateTo(page) {
+      // 添加點擊波紋效果
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      const x = event.clientX - rect.left - size / 2;
+      const y = event.clientY - rect.top - size / 2;
+      
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.add('ripple');
+      
+      button.appendChild(ripple);
+      
+      // 延遲導航以顯示動畫效果
+      setTimeout(() => {
+        location.href = page;
+      }, 150);
+      
+      // 清理波紋元素
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    }
+    
+    // 添加鍵盤導航支持
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '1') {
+        navigateTo('authors.html');
+      } else if (e.key === '2') {
+        navigateTo('tags.html');
+      }
+    });
+  </script>
+</body>
+</html>
